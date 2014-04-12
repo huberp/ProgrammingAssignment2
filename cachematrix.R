@@ -3,7 +3,14 @@
 ## The Pattern consists of two parts
 ## 1. The Cache, see function "makeCacheMatrix"
 ## 2. The Solver which uses the cache, see function "cacheSolve"
+##
+## This file is organized in 2 sections
+## 1. the implementation of the functions
+## 2. some little tests that show how the test works.
 
+##########################################################################
+## Implementation 
+##########################################################################
 
 ## Basically a little Cache "object" Constructor. 
 ## Compare to "makeVector" from instructions
@@ -61,23 +68,23 @@ makeCacheMatrix <- function(x = matrix()) {
 ## Solver Function which uses a "object" returnd by makeCacheMatrix
 ## Compare to "cachemean" from instructions
 ## Little extension is a cache hit counter, which counts
-## the number of succesful cache uses
+## the number of succesful cache uses.
 ##
 ## Param: x, makeCacheMatrix return value, MUST NOT be null
 ## Return: result of solve function, probably cached
 ##
 cacheSolve <- function(x, ...) {
-        ##
-		##cache access. if it has already been set, use the
-		##cached value.
+        #
+		#cache access. if it has already been set, use the
+		#cached value.
 		cachedInverse <- x$getInverse()
 		if(!is.null(cachedInverse)) {
 			message("getting cached data")
 			return(cachedInverse)
 		}
-		##
-		##uncached computation of inverse 
-		##and set the cache 
+		#
+		#uncached computation of inverse 
+		#and set the cache 
 		data <- x$getMatrix()
 		computedInverse <- solve(data, ...)
 		x$setInverse(computedInverse)
@@ -85,27 +92,29 @@ cacheSolve <- function(x, ...) {
 }
 ##
 
-##
-##TEST 
+##########################################################################
+## Test
+##########################################################################
 ##
 ## PREPARE ##########################
 ##provide a 3x3 matrix
 m <- matrix(c(1,2,3,6,0,4,7,8,9),3,3)
-##
-##create a "cache"
+#
+#create a "cache"
 cache <- makeCacheMatrix()
-##
-##set the matrix value of the cache
+#
+#set the matrix value of the cache
 cache$setMatrix(m)
 ##
 ## CROSSCHECK #######################
-##crosscheck 1: same matrix in cache than m?
+##
+#crosscheck 1: same matrix in cache than m?
 mCache<-cache$getMatrix()
 if(!identical(m, m2)) {
 	stop("Matrix is not the same")
 }
-##
-##crosscheck 2: at this point the cached inverse must be null
+#
+#crosscheck 2: at this point the cached inverse must be null
 iCache<-cache$getInvers()
 if(!is.null(iCache)) {
 	stop("Inverse must be null")
@@ -113,18 +122,18 @@ if(!is.null(iCache)) {
 ##
 ## SOLVE ###########################
 ##
-##now solve first time
+#now solve first time
 s1 <- cacheSolve(cache)
-##
-##solve second time
+#
+#solve second time
 s2 <- cacheSolve(cache)
-##
-## s1 and s2 should be identical
+#
+#check: s1 and s2 should be identical
 if(!identical(s1,s2)) {
 	stop("Both inverse computations must be the same")
 }
-##
-##now cacheHits should be 1
+#
+#now cacheHits should be 1
 hits <- cache$getCacheHits()
 if(1!=hits){
 	stop("hits should be 1")
