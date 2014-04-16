@@ -21,8 +21,8 @@
 ## Return: list of functions for cache manipulation
 ##
 makeCacheMatrix <- function(x = matrix()) {
-	cachedInverseOfMatrix <- NULL
-	cacheHits = 0;
+	cachedInverseOfMatrix <- NULL; # cache value; see setInverse and getInverse
+	cacheHits = 0; # a little counter for cache hits, to see if cache is effective
 	##
 	##setter. sets the matrix value. each change will also reset the cacheed inverse.
 	setMatrix <- function(replacedByThisMatrix=matrix()) {
