@@ -25,8 +25,8 @@ makeCacheMatrix <- function(x = matrix()) {
 	cacheHits = 0;
 	##
 	##setter. sets the matrix value. each change will also reset the cacheed inverse.
-	setMatrix <- function(replaceMatrix=matrix()) {
-		x <<- replaceMatrix
+	setMatrix <- function(replacedByThisMatrix=matrix()) {
+		x <<- replacedByThisMatrix
 		cachedInverseOfMatrix <<- NULL
 		cacheHits <<- 0
 	}
@@ -39,7 +39,7 @@ makeCacheMatrix <- function(x = matrix()) {
 	##setter. sets the cached inverse computed by the caller
 	setInverse <- function(inverse) {
 		cachedInverseOfMatrix <<- inverse
-		cacheHits <- 0
+		cacheHits <<- 0
 	}
 	##
 	##getter. get current cached inverse of matrix
@@ -109,8 +109,8 @@ cache$setMatrix(m)
 ## CROSSCHECK #######################
 ##
 #crosscheck 1: same matrix in cache than m?
-mCache<-cache$getMatrix()
-if(!identical(m, m2)) {
+mFromCache<-cache$getMatrix()
+if(!identical(m, mFromCache)) {
 	stop("Matrix is not the same")
 }
 #
@@ -137,4 +137,14 @@ if(!identical(s1,s2)) {
 hits <- cache$getCacheHits()
 if(1!=hits){
 	stop("hits should be 1")
+}
+#
+#solve third time
+s3 <- cacheSolve(cache)
+#
+#now cacheHits should be 1
+hits <- cache$getCacheHits()
+hits
+if(2!=hits){
+	stop("hits should be 2")
 }
